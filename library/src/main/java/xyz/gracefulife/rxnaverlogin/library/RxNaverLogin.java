@@ -55,12 +55,25 @@ public class RxNaverLogin {
   }
 
   /**
+   * 네.아.로에서 직접 사용한다면 이 핸들러를 이용한다.
+   */
+  public NaverOAuthLoginHandler getNaverOAuthLoginHandler() {
+    return naverOAuthLoginHandler;
+  }
+
+  /**
    * 네.아.로에서 제공하는 로그인이 아닌 직접 로그인을 시도하는 경우
    */
   public void doOAuthLogin() {
     oAuthLogin.startOauthLoginActivity(activity, naverOAuthLoginHandler);
   }
 
+  /**
+   * 로그인 이벤트를 한번 기다린다.
+   * single 타입을 리턴하므로, 재사용 시 다시 호출하거나,
+   * 이벤트를 계속 받아야 한다면 getNaverOAuthLoginHandler 메소드를 직접 사용하여,
+   * eventbus를 직접 구독할 수 있다.
+   */
   public Single<Response> waitLoggedIn() {
     return naverOAuthLoginHandler.getSuccessEventBus()
         .observeOn(Schedulers.io())
